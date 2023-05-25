@@ -29,7 +29,7 @@ def annotationShot():
 
 	fin = ss + "." + str(ptts)			# create final screenshot filename
 
-	fpth = opt + "/_notes/" + fdte + "/" + fin + ".png"		# full path + filename and extension
+	fpth = opt + "/_notes/" + fdte + "/" + fin + ".jpg"		# full path + filename and extension
 	jpth = opt + "/_notes/" + fdte + "/"	# just the full path, no filename
 
 	swid = seq.format().width()                      # width of sequence
@@ -41,19 +41,28 @@ def annotationShot():
 	vhig = timg.size().height()                   # viewer image height
 
 	svwid = vwid*(shig/vhig)				# scaled width of viewer
+	svhig = vhig*(swid/vwid)				# scaled height of viewer
 
 
-	ssx = (svwid/2) - (swid/2)				# position of left edge of frame
+	sratio = (swid/shig)
+	vratio = (vwid/vhig)
 
-	simg = timg.scaledToHeight(shig, mode=Qt.SmoothTransformation)      # scale viewer image to format height
+	if sratio > vratio:
+		ssx = (svhig/2) - (shig/2)				# position of left edge of frame
+		simg = timg.scaledToWidth(swid, mode=Qt.SmoothTransformation)      # scale viewer image to format height
+		cimg = simg.copy(0, ssx, swid, shig)  	# crop image to format
+	else:
+		ssx = (svwid/2) - (swid/2)				# position of left edge of frame
+		simg = timg.scaledToHeight(shig, mode=Qt.SmoothTransformation)      # scale viewer image to format height
+		cimg = simg.copy(ssx, 0, swid, shig)  	# crop image to format
+	
 
-	cimg = simg.copy(ssx, 0, swid, shig)  	# crop image to format
 
 
 	dircmd = 'mkdir -p "' + jpth + '"'		# if it doesn't exist, make dated folder inside _notes folder
 	os.system(dircmd)				# run mkdir command
 
-	cimg.save(fpth, "PNG")			# save cropped & scaled image to folder
+	cimg.save(fpth, "jpg")			# save cropped & scaled image to folder
 	
 	# add the colorsync profile
 	os.system( 'sips -s profile /Library/ColorSync/Profiles/Displays/StudioDisplay-7B124C67-2DD2-8F2D-1452-F1C958A0C9F4.icc "' + fpth + '"')
