@@ -35,6 +35,7 @@ def annotationShot():
 	swid = seq.format().width()                      # width of sequence
 	shig = seq.format().height()                     # height of sequence
 	asp = seq.format().pixelAspect()
+	swid = swid*asp
 
 	vwid = timg.size().width()                    # viewer image width
 	vhig = timg.size().height()                   # viewer image height
@@ -46,7 +47,7 @@ def annotationShot():
 
 	simg = timg.scaledToHeight(shig, mode=Qt.SmoothTransformation)      # scale viewer image to format height
 
-	cimg = simg.copy(ssx, 0, swid*asp, shig)  	# crop image to format
+	cimg = simg.copy(ssx, 0, swid, shig)  	# crop image to format
 
 
 	dircmd = 'mkdir -p "' + jpth + '"'		# if it doesn't exist, make dated folder inside _notes folder
