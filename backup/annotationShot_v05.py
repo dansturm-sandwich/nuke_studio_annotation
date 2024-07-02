@@ -3,15 +3,12 @@ import hiero.ui
 import os
 import os.path 
 import datetime
-import time
 from PySide2 import QtCore
 from PySide2.QtCore import *
 
 
 
 def annotationShot():
-	timestamp = int(time.time())
-	timestamp = str(timestamp)
 	te = hiero.ui.currentViewer()		# Get active viewer
 	ve = te.player()			        # Get player element of viewer
 
@@ -30,7 +27,7 @@ def annotationShot():
 	x = datetime.datetime.now()			# create date time object
 	fdte = x.strftime("%y%m%d")			# format date object
 
-	fin = ss + "_" + timestamp + "." + str(ptts)			# create final screenshot filename
+	fin = ss + "." + str(ptts)			# create final screenshot filename
 
 	fpth = opt + "/_notes/" + fdte + "/" + fin + ".jpg"		# full path + filename and extension
 	jpth = opt + "/_notes/" + fdte + "/"	# just the full path, no filename
@@ -46,6 +43,7 @@ def annotationShot():
 	svwid = vwid*(shig/vhig)				# scaled width of viewer
 	svhig = vhig*(swid/vwid)				# scaled height of viewer
 
+
 	sratio = (swid/shig)
 	vratio = (vwid/vhig)
 
@@ -58,6 +56,9 @@ def annotationShot():
 		simg = timg.scaledToHeight(shig, mode=Qt.SmoothTransformation)      # scale viewer image to format height
 		cimg = simg.copy(ssx, 0, swid, shig)  	# crop image to format
 	
+
+
+
 	dircmd = 'mkdir -p "' + jpth + '"'		# if it doesn't exist, make dated folder inside _notes folder
 	os.system(dircmd)				# run mkdir command
 
@@ -68,11 +69,7 @@ def annotationShot():
 
 	os.system('open "' + jpth + '"')	# open the folder containing the screenshot
 	os.system('open "' + fpth + '"')	# open the screenshot
-	annotools = """
-	osascript -e 'tell application "System Events" to keystroke "a" using {command down, shift down}' 
-	"""
-	time.sleep(1)
-	os.system(annotools)
-	
-	# print(fpth)
+
+
+	print(fpth)
 
