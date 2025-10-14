@@ -3,7 +3,7 @@ import hiero.ui
 import os
 import datetime
 import time
-from PySide2.QtCore import Qt
+from PySide6.QtCore import Qt
 
 
 def annotationShot():
@@ -69,14 +69,14 @@ def annotationShot():
     # Save cropped/scaled image
     cimg.save(fpth, "jpg")
 
-    # Add the colorsync profile
+    # Apply display ICC profile
     os.system(f'sips -s profile /Library/ColorSync/Profiles/Displays/StudioDisplay-7B124C67-2DD2-8F2D-1452-F1C958A0C9F4.icc "{fpth}"')
 
-    # Open the folder and file
+    # Open the saved image and containing folder
     os.system(f'open "{jpth}"')
     os.system(f'open "{fpth}"')
 
-    # Trigger annotation tool (Cmd+Shift+A)
+    # Activate annotation tool (Cmd+Shift+A)
     time.sleep(1)
     os.system("""osascript -e 'tell application "System Events" to keystroke "a" using {command down, shift down}'""")
 
